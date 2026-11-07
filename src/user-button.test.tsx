@@ -67,7 +67,7 @@ describe('<UserButton />', () => {
     expect(box.querySelector('button')!.textContent).toBe('Sign in')
   })
 
-  it('waits, disabled, while the session is on its way', () => {
+  it('waits, disabled, while the session is on its way', async () => {
     const box = document.createElement('div')
     document.body.appendChild(box)
     root = createRoot(box)
@@ -75,6 +75,9 @@ describe('<UserButton />', () => {
     const button = box.querySelector('button')!
     expect(button.disabled).toBe(true)
     expect(button.getAttribute('aria-busy')).toBe('true')
+    // The answer arrives inside act: the button then names the person.
+    await settle()
+    expect(box.querySelector('button[aria-haspopup="menu"]')).not.toBeNull()
   })
 
   it('names the person, opens its menu from the keyboard, moves through it and closes with Escape', async () => {
