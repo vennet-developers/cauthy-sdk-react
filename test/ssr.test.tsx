@@ -23,6 +23,27 @@ describe('rendering on the server', () => {
     }
   })
 
+  it("never writes a theme value that is more than a value into the page's style attribute", () => {
+    const evil = 'red;background:url(https://evil.example.com/x.png)'
+    const theme = {
+      primary: evil,
+      accent: '#123456</style><script>alert(1)</script>',
+      surface: 'expression(alert(1))',
+      text: 'javascript:alert(1)',
+      radius: '4px;behavior:url(https://evil.example.com/x.htc)' as unknown as number,
+      fontFamily: 'Inter"; } body { background:url(https://evil.example.com/y)',
+      border: '#00ff00',
+    }
+    for (const Part of [SignIn, UserButton, Organizations] as ComponentType<any>[]) {
+      const html = renderToString(h(CauthyProvider, { initialSession: ana, theme, children: h(Part, {}) }))
+      const styles = [...html.matchAll(/style="([^"]*)"/g)].map((m) => m[1]).join(' ')
+      for (const bad of ['evil', 'url(', 'expression', 'javascript', '&lt;', 'script', 'behavior', '}']) expect(styles, bad).not.toContain(bad)
+      expect(html).not.toContain('evil.example.com')
+      // What is a value gets through.
+      expect(styles).toContain('--cauthy-border:#00ff00')
+    }
+  })
+
   it('draws who is signed in from the session the server read, with no loading', () => {
     expect(renderToString(h(CauthyProvider, { initialSession: ana, children: h(UserButton) }))).toContain('aria-label="Account menu for Ana"')
     expect(renderToString(h(CauthyProvider, { initialSession: null, children: h(UserButton) }))).toContain('>Sign in</button>')
