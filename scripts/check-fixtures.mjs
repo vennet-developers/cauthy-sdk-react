@@ -30,7 +30,8 @@ const IDS = new Set([
 const LENGTHS = [...new Set(WORDS.map(([n]) => n))]
 const HASHES = new Set(WORDS.map(([, x]) => x))
 const ALLOWED = /vennet[- ]developers/g
-const SKIP = new Set(['node_modules', '.git', 'dist', '.conformance'])
+// Dependencies and build output, never committed (.gitignore).
+const SKIP = new Set(['node_modules', '.git', 'dist', '.conformance', '.next', 'test-results', 'playwright-report'])
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = resolve(process.argv[2] ?? join(here, '..'))
