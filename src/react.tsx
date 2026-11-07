@@ -1,0 +1,140 @@
+// React: who is signed in, in the browser.
+//
+//   <CauthyProvider>            // once, at the root
+//     <App />
+//   </CauthyProvider>
+//
+//   const { session, status, signIn, signOut } = useSession()
+//
+// The browser never holds a token: it asks the application's own server
+// (`/api/auth/session`), which answers who is signed in and their
+// organizations. The session store of @cauthyhq/js keeps it current: it asks
+// again a little before the session expires and when the window comes back
+// into view.
+
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useSyncExternalStore, type CSSProperties, type ReactNode } from 'react'
+import { createSessionStore, type AuthClient, type PublicSession, type SessionStore } from '@cauthyhq/js'
+import { themeVariables, type CauthyTheme } from '@cauthyhq/js/theme'
+
+export interface SessionContext {
+  /** The signed-in person and their organizations, or null. */
+  session: PublicSession | null
+  status: 'loading' | 'authenticated' | 'unauthenticated'
+  /** Sends the browser to sign in, and back to `returnTo` (default: where it is now). */
+  signIn(options?: { returnTo?: string; locale?: string; prompt?: 'login' }): void
+  /** Signs out of this application and of Cauthy in this browser. */
+  signOut(): void
+  /** Asks the server again who is signed in. */
+  refresh(): Promise<PublicSession | null>
+  /** Where the person looks after their account: password, second step, passkeys. */
+  accountUrl(returnTo?: string): string
+  /** Where the server mounted the routes. */
+  basePath: string
+}
+
+export interface CauthyProviderProps {
+  children: ReactNode
+  /** Where the server mounted the routes. Default: `/api/auth`. */
+  basePath?: string
+  /**
+   * The session the server already read while rendering (SSR): the first
+   * paint is then right, with no "loading". `null` means "nobody"; leave it
+   * out when the server did not look.
+   */
+  initialSession?: PublicSession | null
+  /**
+   * The language the person reads, for what Cauthy mails them from
+   * `useAuth()` and the ready-made forms (a sign-in link, a new password, a
+   * confirmation): a tag like `es` or `es-CO`, or a function that answers it
+   * when the person can change it. Default: the page's own (`<html lang>`),
+   * else the browser's.
+   */
+  locale?: string | (() => string | undefined)
+  /**
+   * The application's own look for every ready-made part, over the one set in
+   * Cauthy's dashboard: colours, corners, typeface. An application built with
+   * stackmyth passes its tokens: `theme={themeFromStackmyth(css).theme}`.
+   */
+  theme?: CauthyTheme
+  /** The fetch the routes are called with. Default: the page's own. */
+  fetch?: typeof fetch
+  /** Called once when the server does not say `Cauthy-Protocol: 1`. Default: one console warning. */
+  onProtocolMismatch?: (seen: string | null) => void
+}
+
+const StoreCtx = createContext<SessionStore | null>(null)
+const ThemeCtx = createContext<CauthyTheme | undefined>(undefined)
+
+export function CauthyProvider({ children, basePath = '/api/auth', initialSession, locale, theme, fetch, onProtocolMismatch }: CauthyProviderProps) {
+  // The latest of each, read when a request goes out: a new language or fetch
+  // reaches the next request without making the store again.
+  const latest = useRef({ locale, fetch, onProtocolMismatch })
+  latest.current = { locale, fetch, onProtocolMismatch }
+  const readLocale = useCallback(() => {
+    const l = latest.current.locale
+    return typeof l === 'function' ? l() : l
+  }, [])
+  // What the server rendered with seeds the store once; later renders do not reset it.
+  const first = useRef(initialSession)
+  const handsMismatch = useRef(onProtocolMismatch !== undefined)
+  const store = useMemo(
+    () => createSessionStore({
+      basePath,
+      initialSession: first.current,
+      locale: readLocale,
+      fetch: (...args: Parameters<typeof globalThis.fetch>) => (latest.current.fetch ?? globalThis.fetch)(...args),
+      ...(handsMismatch.current ? { onProtocolMismatch: (seen: string | null) => latest.current.onProtocolMismatch?.(seen) } : {}),
+    }),
+    [basePath, readLocale],
+  )
+  // The provider listens for as long as it is mounted: the session is asked
+  // for and kept current even before a part reads it.
+  useEffect(() => store.subscribe(() => {}), [store])
+  return (
+    <StoreCtx.Provider value={store}>
+      <ThemeCtx.Provider value={theme}>{children}</ThemeCtx.Provider>
+    </StoreCtx.Provider>
+  )
+}
+
+/** The store under the nearest provider. For this package's own parts. */
+export function useSessionStore(): SessionStore {
+  const store = useContext(StoreCtx)
+  if (store === null) throw new Error('@cauthyhq/react: useSession needs <CauthyProvider> above it')
+  return store
+}
+
+/** The provider's `theme`, or undefined. For this package's own parts. */
+export function useProviderTheme(): CauthyTheme | undefined {
+  return useContext(ThemeCtx)
+}
+
+/** The provider's `theme` as the variables styles.css reads, or undefined. For this package's own parts. */
+export function useThemeVariables(): CSSProperties | undefined {
+  const theme = useContext(ThemeCtx)
+  return useMemo(() => (theme ? (themeVariables(theme) as CSSProperties) : undefined), [theme])
+}
+
+export function useSession(): SessionContext {
+  const store = useSessionStore()
+  const state = useSyncExternalStore(store.subscribe, store.get, store.get)
+  return useMemo(
+    () => ({ session: state.session, status: state.status, refresh: store.refresh, signIn: store.signIn, signOut: store.signOut, accountUrl: store.accountUrl, basePath: store.basePath }),
+    [state, store],
+  )
+}
+
+/**
+ * The application's own sign-in screens: the functions a form calls.
+ *
+ *   const { signIn, signUp, forgotPassword, signOut, session } = useAuth()
+ *   const r = await signIn.email({ email, password })
+ *
+ * They are `createAuthClient()`'s, and what is on screen follows them: after
+ * a sign-in or a sign-out, `session` is the new one with no reload.
+ */
+export function useAuth(): AuthClient & Pick<SessionContext, 'session' | 'status' | 'refresh'> {
+  const store = useSessionStore()
+  const { session, status, refresh } = useSession()
+  return useMemo(() => ({ ...store.auth, session, status, refresh }), [store, session, status, refresh])
+}
