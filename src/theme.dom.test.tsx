@@ -53,4 +53,21 @@ describe('the look of the ready-made parts', () => {
     expect(asked).toContain('GET /look')
     expect(form.style.getPropertyValue('--cauthy-primary')).toBe('#123456')
   })
+
+  it("asks for the workspace's look with the provider's fetch, and its protocol check", async () => {
+    const own: string[] = []
+    const onProtocolMismatch = vi.fn()
+    const ownFetch = (async (url: string) => {
+      own.push(String(url))
+      // No Cauthy-Protocol header: the provider's handler hears it.
+      if (String(url) === '/own-auth/look') return Response.json({ primary: '#654321' })
+      return Response.json({ providers: [], passwordSignIn: true, signUp: true }, { headers: { 'cauthy-protocol': '1' } })
+    }) as typeof fetch
+    const box = await show(h(CauthyProvider, { basePath: '/own-auth', initialSession: null, fetch: ownFetch, onProtocolMismatch, children: h(SignIn) }))
+    const form = box.querySelector('[data-cauthy]') as HTMLElement
+    expect(own).toContain('/own-auth/look')
+    expect(asked.some((a) => a.includes('look'))).toBe(false)
+    expect(onProtocolMismatch).toHaveBeenCalledWith(null)
+    expect(form.style.getPropertyValue('--cauthy-primary')).toBe('#654321')
+  })
 })

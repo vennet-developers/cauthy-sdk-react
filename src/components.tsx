@@ -14,7 +14,7 @@
 
 import { Fragment, useCallback, useEffect, useId, useRef, useState, useSyncExternalStore, type ComponentType, type CSSProperties, type FormEvent, type ReactNode } from 'react'
 import { canUsePasskeys, checkEmail, checkName, checkNewPassword, checkPassword, createAuthClient, passwordProblems, describePasswordPolicy, explainPasswordProblems, MIN_PASSWORD, type PasswordPolicy, type Account as AccountDetails, type AccountSession, type AuthError, type ConnectedAgent, type AuthMethods, type Invitation, type LinkedIdentity, type OrganizationPerson, type OrganizationRoleChoice, type OrganizationSeat, type Passkey, type PendingLegal, type SecondStep, type SSOConnection } from '@cauthyhq/js'
-import { useAuth, useProviderTheme, useSession } from './react'
+import { useAuth, useProviderTheme, useSession, useSessionStore } from './react'
 import { themeVariables, type CauthyTheme, type ThemeFont } from '@cauthyhq/js/theme'
 import { checkOrganization } from '@cauthyhq/js'
 
@@ -578,6 +578,8 @@ function loadFonts(fonts: ThemeFont[] | undefined) {
  */
 function useRoot(props: { unstyled?: boolean; workspaceLook?: boolean }): { 'data-cauthy'?: ''; style?: CSSProperties } {
   const { basePath } = useSession()
+  // The provider's own client: its fetch and its protocol check apply to the look too.
+  const store = useSessionStore()
   // The application's own look, given to <CauthyProvider theme>, wins over the workspace's.
   const given = useProviderTheme()
   const [vars, setVars] = useState<Record<string, string>>({})
@@ -590,7 +592,7 @@ function useRoot(props: { unstyled?: boolean; workspaceLook?: boolean }): { 'dat
     let live = true
     let look = looks.get(basePath)
     if (!look) {
-      look = createAuthClient({ basePath }).look()
+      look = store.auth.look()
       looks.set(basePath, look)
     }
     void look.then((theme) => {
@@ -599,7 +601,7 @@ function useRoot(props: { unstyled?: boolean; workspaceLook?: boolean }): { 'dat
       loadFonts(theme.fonts)
     })
     return () => { live = false }
-  }, [basePath, wanted])
+  }, [basePath, store, wanted])
   if (props.unstyled) return {}
   return { 'data-cauthy': '', style: (given ? themeVariables(given) : vars) as CSSProperties }
 }
