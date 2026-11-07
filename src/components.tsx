@@ -574,16 +574,17 @@ function loadFonts(fonts: ThemeFont[] | undefined) {
 
 /**
  * What the outermost element of a form carries: the mark `styles.css` styles
- * (`data-cauthy`) and the workspace's look as its variables.
+ * (`data-cauthy`) and the look as its variables: the workspace's from Cauthy's
+ * dashboard, with the application's own (<CauthyProvider theme>) laid over it.
  */
 function useRoot(props: { unstyled?: boolean; workspaceLook?: boolean }): { 'data-cauthy'?: ''; style?: CSSProperties } {
   const { basePath } = useSession()
   // The provider's own client: its fetch and its protocol check apply to the look too.
   const store = useSessionStore()
-  // The application's own look, given to <CauthyProvider theme>, wins over the workspace's.
+  // The application's own look, given to <CauthyProvider theme>: what it sets wins, the rest is the workspace's.
   const given = useProviderTheme()
-  const [vars, setVars] = useState<Record<string, string>>({})
-  const wanted = !props.unstyled && props.workspaceLook !== false && given === undefined
+  const [workspace, setWorkspace] = useState<CauthyTheme | null>(null)
+  const wanted = !props.unstyled && props.workspaceLook !== false
   useEffect(() => {
     if (!props.unstyled && given) loadFonts(given.fonts)
   }, [given, props.unstyled])
@@ -597,13 +598,14 @@ function useRoot(props: { unstyled?: boolean; workspaceLook?: boolean }): { 'dat
     }
     void look.then((theme) => {
       if (!live || !theme) return
-      setVars(themeVariables(theme))
+      setWorkspace(theme)
       loadFonts(theme.fonts)
     })
     return () => { live = false }
   }, [basePath, store, wanted])
   if (props.unstyled) return {}
-  return { 'data-cauthy': '', style: (given ? themeVariables(given) : vars) as CSSProperties }
+  const shown = wanted ? workspace : null
+  return { 'data-cauthy': '', style: themeVariables({ ...shown, ...given }) as CSSProperties }
 }
 
 /** Cloudflare Turnstile, as much of it as the forms use. */
