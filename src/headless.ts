@@ -5,15 +5,16 @@
 //   const flow = useSignInFlow()
 //   if (flow.step.name === 'mfa') return <CodeForm onCode={flow.code} />
 
-import { useMemo, useState, useSyncExternalStore } from 'react'
+import { useMemo, useSyncExternalStore } from 'react'
 import { createSignInFlow, type FlowState, type SignInFlow } from '@cauthyhq/js'
-import { useAuth } from './react'
+import { useSessionStore } from './react'
 
 export function useSignInFlow(): SignInFlow & FlowState {
-  const auth = useAuth()
-  // One flow per mounted form. The functions of `auth` are the store's, the
-  // same on every render, so the session changing does not restart it.
-  const [flow] = useState(() => createSignInFlow(auth))
+  // One flow per mounted form and store. The store's functions are the same
+  // on every render, so the session changing does not restart it; a new store
+  // (the provider given another mount point) does.
+  const store = useSessionStore()
+  const flow = useMemo(() => createSignInFlow(store.auth), [store])
   const state = useSyncExternalStore(flow.subscribe, flow.get, flow.get)
   return useMemo(() => ({ ...flow, ...state }), [flow, state])
 }

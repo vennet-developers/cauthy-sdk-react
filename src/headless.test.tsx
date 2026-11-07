@@ -10,10 +10,13 @@ import { CauthyProvider, useSession } from './react'
 
 const ana: PublicSession = { user: { id: 'u1', email: 'ana@acme.com', name: 'Ana', emailVerified: true, restricted: false }, tenantId: 't1', roles: [], organizations: [], expiresAt: new Date(Date.now() + 600_000).toISOString() }
 let current: PublicSession | null
+let asked: string[]
 beforeEach(() => {
   current = null
+  asked = []
   vi.stubGlobal('fetch', async (url: string) => {
-    const path = String(url).replace(/^\/api\/auth/, '')
+    asked.push(String(url))
+    const path = String(url).replace(/^\/(api\/auth|other-auth)/, '')
     const headers = { 'cauthy-protocol': '1' }
     if (path === '/sign-in/email') return Response.json({ status: 'mfa_required', next: 'mfa' }, { headers })
     if (path === '/sign-in/mfa') {
@@ -54,5 +57,20 @@ describe('useSignInFlow', () => {
     await act(async () => { await flow!.code('123456') })
     await settle()
     expect(box.textContent).toBe('done|false|-|Ana')
+  })
+
+  it('starts again on the new store when the provider is given another mount point', async () => {
+    const box = document.createElement('div')
+    document.body.appendChild(box)
+    root = createRoot(box)
+    act(() => root!.render(h(CauthyProvider, { initialSession: null, children: h(Flow) })))
+    await settle()
+    await act(async () => { await flow!.password({ email: 'ana@acme.com', password: 'right-password' }) })
+    expect(box.textContent).toBe('mfa|false|-|-')
+    act(() => root!.render(h(CauthyProvider, { basePath: '/other-auth', initialSession: null, children: h(Flow) })))
+    await settle()
+    expect(box.textContent).toBe('start|false|-|-')
+    await act(async () => { await flow!.password({ email: 'ana@acme.com', password: 'right-password' }) })
+    expect(asked).toContain('/other-auth/sign-in/email')
   })
 })

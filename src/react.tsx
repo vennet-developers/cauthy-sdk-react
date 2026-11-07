@@ -34,7 +34,12 @@ export interface SessionContext {
 
 export interface CauthyProviderProps {
   children: ReactNode
-  /** Where the server mounted the routes. Default: `/api/auth`. */
+  /**
+   * Where the server mounted the routes. Default: `/api/auth`. Fixed for the
+   * life of the provider: it is the session store's address, so a different
+   * one means another store, with the session asked again and every flow
+   * started over. To move it, remount the provider (`key={basePath}`).
+   */
   basePath?: string
   /**
    * The session the server already read while rendering (SSR): the first
