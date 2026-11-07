@@ -53,7 +53,7 @@
     "e2e:record": "npm run e2e:build && E2E_BACKEND=record playwright test --project chromium",
     "e2e:fixture": "npm run e2e:build && E2E_BACKEND=fixture playwright test",
     "e2e:go": "npm run e2e:build && E2E_BACKEND=go playwright test",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "node scripts/no-file-deps.mjs && npm run build"
   },
   "peerDependencies": {
     "react": ">=18"
