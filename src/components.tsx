@@ -1288,6 +1288,8 @@ export function SignIn(props: AuthFormProps) {
       return f.fail(r.error)
     }
     if (r.status === 'mfa_required') {
+      // The password has done its work: the second step needs only a code.
+      setPassword('')
       f.setBusy(false)
       return setStep('code')
     }
