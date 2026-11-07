@@ -1,0 +1,56 @@
+// @vitest-environment jsdom
+// The look: the application's theme from the provider first, otherwise the
+// workspace's from Cauthy's dashboard. The two tests share the page's look
+// cache, so their order matters.
+import { act, createElement as h } from 'react'
+import { createRoot, type Root } from 'react-dom/client'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { SignIn } from './components'
+import { CauthyProvider } from './react'
+
+;(globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true
+
+let asked: string[]
+beforeEach(() => {
+  asked = []
+  vi.stubGlobal('fetch', async (url: string, init?: RequestInit) => {
+    const path = String(url).replace(/^\/api\/auth/, '')
+    asked.push(`${init?.method ?? 'GET'} ${path}`)
+    const headers = { 'cauthy-protocol': '1' }
+    if (path === '/look') return Response.json({ primary: '#123456' }, { headers })
+    if (path === '/methods') return Response.json({ providers: [], passwordSignIn: true, signUp: true }, { headers })
+    return Response.json({ session: null, status: 'unauthenticated' }, { headers })
+  })
+})
+let root: Root | null = null
+afterEach(() => {
+  act(() => root?.unmount())
+  root = null
+  vi.unstubAllGlobals()
+  document.body.innerHTML = ''
+})
+async function show(el: ReturnType<typeof h>) {
+  const box = document.createElement('div')
+  document.body.appendChild(box)
+  root = createRoot(box)
+  act(() => root!.render(el))
+  for (let i = 0; i < 6; i++) await act(async () => { await new Promise((r) => setTimeout(r, 0)) })
+  return box
+}
+
+describe('the look of the ready-made parts', () => {
+  it("takes the application's theme over the workspace's, and asks Cauthy for none", async () => {
+    const box = await show(h(CauthyProvider, { initialSession: null, theme: { primary: '#e8590c', radius: 12 }, children: h(SignIn) }))
+    const form = box.querySelector('[data-cauthy]') as HTMLElement
+    expect(form.style.getPropertyValue('--cauthy-primary')).toBe('#e8590c')
+    expect(form.style.getPropertyValue('--cauthy-radius')).toBe('12px')
+    expect(asked).not.toContain('GET /look')
+  })
+
+  it("reads the workspace's look when the application gives none", async () => {
+    const box = await show(h(CauthyProvider, { initialSession: null, children: h(SignIn) }))
+    const form = box.querySelector('[data-cauthy]') as HTMLElement
+    expect(asked).toContain('GET /look')
+    expect(form.style.getPropertyValue('--cauthy-primary')).toBe('#123456')
+  })
+})

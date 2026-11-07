@@ -1,0 +1,363 @@
+/*
+ * @cauthyhq/react/styles.css — a look for the ready-made forms (<SignIn />,
+ * <SignUp />, <Account />…), with no dependencies.
+ *
+ *   import '@cauthyhq/react/styles.css'
+ *
+ * Every rule is inside :where(), so it weighs nothing: any rule of the
+ * application's own wins. The colours, corners and typeface are variables
+ * (--cauthy-*). The forms set them to what a person chose for the workspace
+ * in Cauthy's dashboard; set them yourself with `workspaceLook={false}`. A part
+ * given a class of its own (`classNames`) is left to it, and a form with
+ * `unstyled` is not touched at all.
+ */
+
+:where([data-cauthy]) {
+  --cauthy-surface: #ffffff;
+  --cauthy-text: #12100e;
+  --cauthy-text-muted: #514a42;
+  --cauthy-border: #e2dbd0;
+  --cauthy-input-background: var(--cauthy-surface);
+  --cauthy-input-border: #cfc7ba;
+  --cauthy-primary: #12100e;
+  --cauthy-primary-text: #f5f1ea;
+  --cauthy-accent: #8a6e3b;
+  --cauthy-error: #b42318;
+  --cauthy-error-background: #fef3f2;
+  --cauthy-success: #067647;
+  --cauthy-success-background: #ecfdf3;
+  --cauthy-radius: 6px;
+  --cauthy-button-radius: 6px;
+  --cauthy-font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  font-family: var(--cauthy-font);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--cauthy-text);
+  box-sizing: border-box;
+}
+
+:where([data-cauthy]) *,
+:where([data-cauthy]) *::before,
+:where([data-cauthy]) *::after {
+  box-sizing: inherit;
+}
+
+/* ── The form, and the account screen's parts ─────────────────────────────── */
+
+:where(.cauthy-form[data-cauthy]),
+:where([data-cauthy] .cauthy-section) {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 380px;
+  margin: 0;
+}
+
+:where(.cauthy-account[data-cauthy]) {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 520px;
+}
+
+:where([data-cauthy] .cauthy-section) {
+  max-width: none;
+  padding: 18px;
+  background: var(--cauthy-surface);
+  border: 1px solid var(--cauthy-border);
+  border-radius: var(--cauthy-radius);
+}
+
+:where([data-cauthy] .cauthy-heading) {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* ── Fields ──────────────────────────────────────────────────────────────── */
+
+:where([data-cauthy] .cauthy-field) {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+:where([data-cauthy] .cauthy-label) {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cauthy-text-muted);
+}
+
+:where([data-cauthy] .cauthy-input) {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  font: inherit;
+  color: var(--cauthy-text);
+  background: var(--cauthy-input-background);
+  border: 1px solid var(--cauthy-input-border);
+  border-radius: var(--cauthy-radius);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+:where([data-cauthy] .cauthy-input:focus-visible) {
+  border-color: var(--cauthy-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cauthy-accent) 25%, transparent);
+}
+
+:where([data-cauthy] .cauthy-input[aria-invalid="true"]) {
+  border-color: var(--cauthy-error);
+}
+
+:where([data-cauthy] .cauthy-fieldError) {
+  font-size: 12px;
+  color: var(--cauthy-error);
+}
+
+/* What a new password must be, under its field. */
+:where([data-cauthy] .cauthy-hint) {
+  font-size: 12px;
+  color: var(--cauthy-text-muted);
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+
+:where([data-cauthy] .cauthy-button),
+:where([data-cauthy] .cauthy-providerButton) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 40px;
+  padding: 0 16px;
+  font: inherit;
+  font-weight: 500;
+  border-radius: var(--cauthy-button-radius);
+  cursor: pointer;
+  transition: filter 0.15s, background-color 0.15s;
+}
+
+:where([data-cauthy] .cauthy-button) {
+  color: var(--cauthy-primary-text);
+  background: var(--cauthy-primary);
+  border: 1px solid var(--cauthy-primary);
+}
+
+:where([data-cauthy] .cauthy-providerButton) {
+  color: var(--cauthy-text);
+  background: var(--cauthy-input-background);
+  border: 1px solid var(--cauthy-input-border);
+}
+
+/* A provider's logo, before "Continue with …". */
+:where([data-cauthy] .cauthy-providerIcon) {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+:where([data-cauthy] .cauthy-button:hover:not(:disabled)),
+:where([data-cauthy] .cauthy-providerButton:hover:not(:disabled)) {
+  filter: brightness(0.94);
+}
+
+:where([data-cauthy] .cauthy-button:focus-visible),
+:where([data-cauthy] .cauthy-providerButton:focus-visible) {
+  outline: 2px solid var(--cauthy-accent);
+  outline-offset: 2px;
+}
+
+:where([data-cauthy] .cauthy-button:disabled),
+:where([data-cauthy] .cauthy-providerButton:disabled) {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/*
+ * Under way: the pressed button keeps its label with a spinner before it, in
+ * the button's own colour; a form still opening shows the spinner alone. An
+ * icon and never words: the application may be in any language. Without
+ * motion, the ring stays still and pulses nothing: it only shows.
+ */
+:where([data-cauthy] .cauthy-spinner) {
+  display: inline-block;
+  flex: none;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: cauthy-spin 0.7s linear infinite;
+}
+
+:where([data-cauthy] .cauthy-button[aria-busy="true"]),
+:where([data-cauthy] .cauthy-providerButton[aria-busy="true"]) {
+  cursor: progress;
+}
+
+@keyframes cauthy-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where([data-cauthy] .cauthy-spinner) {
+    animation: none;
+    border-right-color: currentColor;
+    border-style: dotted;
+  }
+}
+
+:where(.cauthy-section) > :where(.cauthy-button, .cauthy-providerButton) {
+  width: auto;
+  align-self: flex-start;
+}
+
+/* ── Words around the form ───────────────────────────────────────────────── */
+
+/* Always underlined: an action the size of a sentence ("Forgot password?",
+   "Create an account") has to look like the link it is, not plain text. */
+:where([data-cauthy] .cauthy-link) {
+  color: var(--cauthy-accent);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+:where([data-cauthy] .cauthy-link:hover) {
+  text-decoration-thickness: 2px;
+}
+
+:where([data-cauthy] .cauthy-separator) {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0;
+  font-size: 12px;
+  color: var(--cauthy-text-muted);
+}
+
+:where([data-cauthy] .cauthy-separator)::before,
+:where([data-cauthy] .cauthy-separator)::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--cauthy-border);
+}
+
+:where([data-cauthy] .cauthy-notice) {
+  margin: 0;
+  color: var(--cauthy-text-muted);
+}
+
+/* A form still opening: its spinner alone, in the middle. */
+:where([data-cauthy] .cauthy-pending) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 16px 0;
+  color: var(--cauthy-text-muted);
+}
+
+:where([data-cauthy] [role="status"].cauthy-notice) {
+  padding: 8px 12px;
+  color: var(--cauthy-success);
+  background: var(--cauthy-success-background);
+  border-radius: var(--cauthy-radius);
+}
+
+:where([data-cauthy] .cauthy-error) {
+  margin: 0;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--cauthy-error);
+  background: var(--cauthy-error-background);
+  border-radius: var(--cauthy-radius);
+}
+
+/* A checkbox with its sentence: the terms accepted, a consent given. */
+:where([data-cauthy] .cauthy-check) {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin: 0 0 12px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--cauthy-text-muted);
+}
+:where([data-cauthy] .cauthy-check input) {
+  margin-top: 3px;
+}
+
+:where([data-cauthy] .cauthy-footer) {
+  margin: 4px 0 0;
+  font-size: 13px;
+  text-align: center;
+  color: var(--cauthy-text-muted);
+}
+
+/* ── The account screen's lists ──────────────────────────────────────────── */
+
+:where([data-cauthy] .cauthy-qr) {
+  display: block;
+  width: 220px;
+  max-width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  background: #fff;
+  border-radius: var(--cauthy-radius);
+}
+
+:where([data-cauthy] .cauthy-secret) {
+  padding: 8px 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  word-break: break-all;
+  background: var(--cauthy-input-background);
+  border: 1px dashed var(--cauthy-input-border);
+  border-radius: var(--cauthy-radius);
+}
+
+:where([data-cauthy] .cauthy-codes) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+:where([data-cauthy] .cauthy-sessions) {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+:where([data-cauthy] .cauthy-session) {
+  padding: 8px 10px;
+  font-size: 13px;
+  color: var(--cauthy-text-muted);
+  border: 1px solid var(--cauthy-border);
+  border-radius: var(--cauthy-radius);
+}
+
+/* The workspace's Turnstile challenge, when it asks for one. */
+:where([data-cauthy] .cauthy-challenge) {
+  min-height: 65px;
+}
