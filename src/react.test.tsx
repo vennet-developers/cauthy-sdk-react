@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { act, createElement as h, type ReactNode } from 'react'
+import { act, createElement as h, startTransition, Suspense, type ReactNode } from 'react'
 import { createRoot, type Root } from 'react-dom/client'
 import { renderToString } from 'react-dom/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -90,6 +90,33 @@ describe('<CauthyProvider>', () => {
     act(() => root!.render(h(App, { n: 2 })))
     await settle()
     expect(asked).toEqual(['GET /session'])
+  })
+
+  it('takes a new fetch only from a render that was committed', async () => {
+    const used: string[] = []
+    const answer = (who: string) => (async () => {
+      used.push(who)
+      return Response.json({ session: null, status: 'unauthenticated' }, { headers: { 'cauthy-protocol': '1' } })
+    }) as typeof fetch
+    const committed = answer('committed')
+    const abandoned = answer('abandoned')
+    let ctx: ReturnType<typeof useSession> | null = null
+    function Grab() {
+      ctx = useSession()
+      return null
+    }
+    const never = new Promise<never>(() => {})
+    function Waits(): never {
+      throw never
+    }
+    const app = (f: typeof fetch, wait: boolean) =>
+      h(CauthyProvider, { initialSession: null, fetch: f, children: h(Suspense, { fallback: null }, h(Grab), wait ? h(Waits) : null) })
+    await show(app(committed, false))
+    // A transition that never finishes: React renders the provider with the new fetch, then throws that render away.
+    act(() => startTransition(() => root!.render(app(abandoned, true))))
+    await settle()
+    await act(async () => { await ctx!.refresh() })
+    expect(used).toEqual(['committed'])
   })
 
   it('answers the hosted addresses of its mount point', async () => {

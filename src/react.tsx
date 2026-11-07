@@ -12,7 +12,7 @@
 // again a little before the session expires and when the window comes back
 // into view.
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useSyncExternalStore, type CSSProperties, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useSyncExternalStore, type CSSProperties, type ReactNode } from 'react'
 import { createSessionStore, type AuthClient, type PublicSession, type SessionStore } from '@cauthyhq/js'
 import { themeVariables, type CauthyTheme } from '@cauthyhq/js/theme'
 
@@ -62,14 +62,22 @@ export interface CauthyProviderProps {
   onProtocolMismatch?: (seen: string | null) => void
 }
 
+// A layout effect in the browser, where it runs before anything the commit
+// set off; on the server nothing is committed, and an effect is the same no-op.
+const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect
+
 const StoreCtx = createContext<SessionStore | null>(null)
 const ThemeCtx = createContext<CauthyTheme | undefined>(undefined)
 
 export function CauthyProvider({ children, basePath = '/api/auth', initialSession, locale, theme, fetch, onProtocolMismatch }: CauthyProviderProps) {
   // The latest of each, read when a request goes out: a new language or fetch
-  // reaches the next request without making the store again.
+  // reaches the next request without making the store again. Taken once the
+  // render is committed: a render React throws away (a transition that never
+  // finished) changes nothing.
   const latest = useRef({ locale, fetch, onProtocolMismatch })
-  latest.current = { locale, fetch, onProtocolMismatch }
+  useIsomorphicLayoutEffect(() => {
+    latest.current = { locale, fetch, onProtocolMismatch }
+  })
   const readLocale = useCallback(() => {
     const l = latest.current.locale
     return typeof l === 'function' ? l() : l
