@@ -12,11 +12,11 @@ import { useOrganizations } from './organizations'
 import { useThemeVariables } from './react'
 
 const TEXTS = {
-  en: { title: 'Your organizations', none: 'You do not belong to any organization yet.', loading: 'Loading your organizations…' },
-  es: { title: 'Tus organizaciones', none: 'Todavía no perteneces a ninguna organización.', loading: 'Cargando tus organizaciones…' },
+  en: { title: 'Your organizations', none: 'You do not belong to any organization yet.', loading: 'Loading your organizations…', failed: 'Your organizations could not be loaded.', retry: 'Try again' },
+  es: { title: 'Tus organizaciones', none: 'Todavía no perteneces a ninguna organización.', loading: 'Cargando tus organizaciones…', failed: 'No se pudieron cargar tus organizaciones.', retry: 'Intentar de nuevo' },
 }
 
-type ListPart = 'organizations' | 'organizationList' | 'organization' | 'organizationRole'
+type ListPart = 'organizations' | 'organizationList' | 'organization' | 'organizationRole' | 'retry'
 
 export interface OrganizationsProps extends Omit<OrganizationMembersProps, 'organizationId'> {
   /** Only one system's organizations. */
@@ -33,18 +33,27 @@ export interface OrganizationsProps extends Omit<OrganizationMembersProps, 'orga
 
 export function Organizations(props: OrganizationsProps) {
   const { system, defaultOrganizationId, onSelect, showMembers, listClassNames, ...members } = props
-  const { organizations, loading } = useOrganizations({ system })
+  const { organizations, loading, error, reload } = useOrganizations({ system })
   const [picked, setPicked] = useState<string | null>(defaultOrganizationId ?? null)
   const heading = useId()
   const look = useThemeVariables()
   const t = TEXTS[props.locale ?? 'en']
-  const cx = (part: ListPart | 'heading' | 'notice') =>
+  const cx = (part: ListPart | 'heading' | 'notice' | 'error') =>
     listClassNames?.[part as ListPart] ?? (props.unstyled ? undefined : `cauthy-${part}`)
   const root = props.unstyled ? {} : { 'data-cauthy': '', style: look }
   const current = organizations.find((o) => o.id === picked) ?? organizations[0] ?? null
 
   if (loading && organizations.length === 0) {
     return <section className={cx('organizations')} {...root} aria-busy="true"><p className={cx('notice')} role="status">{t.loading}</p></section>
+  }
+  // A list that could not be had is not an empty one: say so, and offer to ask again.
+  if (error && organizations.length === 0) {
+    return (
+      <section className={cx('organizations')} {...root} aria-busy={loading || undefined}>
+        <p className={cx('error')} role="alert" aria-live="assertive" aria-atomic="true">{t.failed}</p>
+        <button type="button" className={cx('retry')} disabled={loading} onClick={() => void reload()}>{t.retry}</button>
+      </section>
+    )
   }
   if (organizations.length === 0) {
     return <section className={cx('organizations')} {...root}><p className={cx('notice')}>{t.none}</p></section>

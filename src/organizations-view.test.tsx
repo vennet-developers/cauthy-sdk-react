@@ -19,14 +19,19 @@ const ana: PublicSession = { user: { id: 'u1', email: 'ana@acme.com', name: 'Ana
 
 let asked: string[]
 let listed: OrganizationSeat[]
+let failing: boolean
 beforeEach(() => {
   asked = []
   listed = seats
+  failing = false
   vi.stubGlobal('fetch', async (url: string, init?: RequestInit) => {
     const path = String(url).replace(/^\/api\/auth/, '')
     asked.push(`${init?.method ?? 'GET'} ${path}`)
     const headers = { 'cauthy-protocol': '1' }
-    if (path === '/me/organizations') return Response.json({ organizations: listed }, { headers })
+    if (path === '/me/organizations') {
+      if (failing) return Response.json({ error: { code: 'unavailable', message: 'Down.' } }, { status: 503, headers })
+      return Response.json({ organizations: listed }, { headers })
+    }
     if (path.startsWith('/me/organizations/members?')) {
       const who = path.endsWith(SALES) ? { name: 'Bo', email: 'bo@acme.com' } : { name: 'Cy', email: 'cy@acme.com' }
       return Response.json({ members: [{ userId: 'u2', ...who, role: 'member', status: 'active', invited: false, manager: false, you: false, since: '2026-11-01T12:00:00Z' }] }, { headers })
@@ -84,5 +89,19 @@ describe('<Organizations />', () => {
     listed = []
     const box = await show(h(Organizations))
     expect(box.textContent).toContain('You do not belong to any organization yet.')
+  })
+
+  it('says when the list could not be had, not that there is none, and tries again when asked', async () => {
+    failing = true
+    const box = await show(h(Organizations))
+    expect(box.textContent).not.toContain('You do not belong to any organization yet.')
+    const alert = box.querySelector('[role="alert"]') as HTMLElement
+    expect(alert.textContent).toContain('Your organizations could not be loaded.')
+    failing = false
+    const retry = [...box.querySelectorAll('button')].find((b) => b.textContent === 'Try again') as HTMLButtonElement
+    await act(async () => { retry.click() })
+    await settle()
+    expect(box.querySelector('[role="alert"]')).toBeNull()
+    expect(picks(box).map((b) => b.querySelector('span')!.textContent)).toEqual(['Acme Sales', 'Acme Support'])
   })
 })
