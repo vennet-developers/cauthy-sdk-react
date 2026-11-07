@@ -115,7 +115,9 @@ describe('accessibility', () => {
     expect(document.activeElement).toBe(email)
     expect(email.getAttribute('aria-invalid')).toBe('true')
     const error = document.getElementById(email.getAttribute('aria-describedby')!.split(' ')[0])!
-    expect(error.getAttribute('role')).toBe('alert')
+    // Read with its field when the focus lands there; one live region per form, not one per field.
+    expect(error.getAttribute('role')).toBeNull()
+    expect(error.getAttribute('aria-live')).toBeNull()
     expect(error.textContent).not.toBe('')
   })
 })

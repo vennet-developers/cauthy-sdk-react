@@ -664,7 +664,8 @@ describe('every error at once', () => {
     const html = await show(h(SignUp, {}))
     await type(html, 'organization', 'Acme')
     await submit(html.querySelector('form'))
-    expect([...html.querySelectorAll('[role="alert"].cauthy-fieldError')].map((e) => e.textContent)).toEqual(['This is required.', 'This is required.'])
+    // Each field's error is read with its field (aria-describedby), not shouted on its own.
+    expect([...html.querySelectorAll('.cauthy-fieldError')].map((e) => [e.textContent, e.getAttribute('role')])).toEqual([['This is required.', null], ['This is required.', null]])
     expect(document.activeElement?.getAttribute('name')).toBe('email')
     await type(html, 'email', 'ana@example.com')
     await type(html, 'password', 'short')

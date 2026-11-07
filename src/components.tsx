@@ -1002,7 +1002,8 @@ function Field(p: {
       <label className={f.cx('label')} htmlFor={id}>{p.label}{p.aside}</label>
       {input}
       {p.hint && !bad && <span id={`${id}-hint`} className={f.cx('hint')}>{p.hint}</span>}
-      {bad && <span id={`${id}-error`} role="alert" aria-live="assertive" className={f.cx('fieldError')}>{f.say(bad)}</span>}
+      {/* Read with the field (aria-describedby) when the focus lands on the first wrong one; the form's own alert is the live region. */}
+      {bad && <span id={`${id}-error`} className={f.cx('fieldError')}>{f.say(bad)}</span>}
     </div>
   )
 }
