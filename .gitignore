@@ -1,0 +1,14 @@
+node_modules/
+dist/
+coverage/
+*.tgz
+.DS_Store
+.env*
+local.env
+e2e/app/dist/
+test-results/
+playwright-report/
+examples/next-acme/.next/
+examples/next-acme/next-env.d.ts
+examples/next-acme/node_modules/
+examples/next-acme/package-lock.json

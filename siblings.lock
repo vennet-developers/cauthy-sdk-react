@@ -1,0 +1,4 @@
+# The sibling repositories this package uses by file: until they are on npm,
+# at the commits CI fetches (scripts/siblings.sh). Task 33 retires this file.
+cauthy-sdk-js 917938ec6dca5699f3db0904f7baa311d5e37aad
+cauthy-sdk-node 5160cda37f24e29b944274d0e38ef6003a6810dc
