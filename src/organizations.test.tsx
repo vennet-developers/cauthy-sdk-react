@@ -14,14 +14,20 @@ const seat = (name: string): OrganizationSeat => ({ id: SALES, system: 'acme-crm
 
 let asked: string[]
 let name: string
+let down: 'refused' | 'unreachable' | null
 beforeEach(() => {
   asked = []
   name = 'Acme Sales'
+  down = null
   vi.stubGlobal('fetch', async (url: string, init?: RequestInit) => {
     const path = String(url).replace(/^\/api\/auth/, '')
     asked.push(`${init?.method ?? 'GET'} ${path}`)
     const headers = { 'cauthy-protocol': '1' }
-    if (path.startsWith('/me/organizations?') || path === '/me/organizations') return Response.json({ organizations: [seat(name)] }, { headers })
+    if (path.startsWith('/me/organizations?') || path === '/me/organizations') {
+      if (down === 'unreachable') throw new TypeError('Failed to fetch')
+      if (down === 'refused') return Response.json({ error: { code: 'forbidden', message: 'Not for you.' } }, { status: 403, headers })
+      return Response.json({ organizations: [seat(name)] }, { headers })
+    }
     if (path === '/me/organizations/rename') {
       name = JSON.parse(String(init!.body)).name
       return Response.json({ status: 'renamed', organization: seat(name) }, { headers })
@@ -52,7 +58,7 @@ let grabbed: UseOrganizations | null = null
 function Names({ system }: { system?: string }) {
   const orgs = useOrganizations({ system })
   grabbed = orgs
-  return h('p', null, orgs.loading ? 'loading' : orgs.organizations.map((o) => o.name).join(','))
+  return h('p', null, orgs.loading ? 'loading' : orgs.error ? `error:${orgs.error.code}` : orgs.organizations.map((o) => o.name).join(','))
 }
 
 describe('useOrganizations', () => {
@@ -69,6 +75,21 @@ describe('useOrganizations', () => {
     const box = await show(h(CauthyProvider, { initialSession: null, children: h(Names) }))
     expect(box.textContent).toBe('')
     expect(asked.some((a) => a.includes('/me/organizations'))).toBe(false)
+  })
+
+  it('tells a list it could not get from an empty one', async () => {
+    down = 'refused'
+    const box = await show(h(CauthyProvider, { initialSession: ana, children: h(Names) }))
+    expect(box.textContent).toBe('error:forbidden')
+    expect(grabbed!.organizations).toEqual([])
+    expect(grabbed!.error?.status).toBe(403)
+    down = 'unreachable'
+    await act(async () => { await grabbed!.reload() })
+    expect(grabbed!.error?.code).toBe('unavailable')
+    down = null
+    await act(async () => { await grabbed!.reload() })
+    expect(box.textContent).toBe('Acme Sales')
+    expect(grabbed!.error).toBeNull()
   })
 
   it("lists one system's only when asked", async () => {

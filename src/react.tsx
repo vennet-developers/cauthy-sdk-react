@@ -12,8 +12,8 @@
 // again a little before the session expires and when the window comes back
 // into view.
 
-import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useSyncExternalStore, type CSSProperties, type ReactNode } from 'react'
-import { createSessionStore, type AuthClient, type PublicSession, type SessionStore } from '@cauthyhq/js'
+import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from 'react'
+import { createSessionStore, errorFrom, UNAVAILABLE, type AuthClient, type AuthError, type PublicSession, type SessionStore } from '@cauthyhq/js'
 import { themeVariables, type CauthyTheme } from '@cauthyhq/js/theme'
 
 export interface SessionContext {
@@ -72,6 +72,10 @@ export interface CauthyProviderProps {
 const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect
 
 const StoreCtx = createContext<SessionStore | null>(null)
+// What became of each request the store sent: a hook whose client call answers
+// only data (an empty list, say) learns here whether the server refused it.
+type Outcome = (path: string, error: AuthError | null) => void
+const OutcomesCtx = createContext<Set<Outcome> | null>(null)
 const ThemeCtx = createContext<CauthyTheme | undefined>(undefined)
 
 export function CauthyProvider({ children, basePath = '/api/auth', initialSession, locale, theme, fetch, onProtocolMismatch }: CauthyProviderProps) {
@@ -90,22 +94,39 @@ export function CauthyProvider({ children, basePath = '/api/auth', initialSessio
   // What the server rendered with seeds the store once; later renders do not reset it.
   const first = useRef(initialSession)
   const handsMismatch = useRef(onProtocolMismatch !== undefined)
+  const [outcomes] = useState(() => new Set<Outcome>())
   const store = useMemo(
     () => createSessionStore({
       basePath,
       initialSession: first.current,
       locale: readLocale,
-      fetch: (...args: Parameters<typeof globalThis.fetch>) => (latest.current.fetch ?? globalThis.fetch)(...args),
+      fetch: async (...args: Parameters<typeof globalThis.fetch>) => {
+        const [input] = args
+        const path = (typeof input === 'string' ? input : input instanceof URL ? input.href : input.url).split('?')[0]
+        try {
+          const res = await (latest.current.fetch ?? globalThis.fetch)(...args)
+          if (outcomes.size > 0) {
+            const error = res.ok ? null : errorFrom(res.status, await res.clone().json().catch(() => null))
+            for (const o of [...outcomes]) o(path, error)
+          }
+          return res
+        } catch (e) {
+          for (const o of [...outcomes]) o(path, UNAVAILABLE)
+          throw e
+        }
+      },
       ...(handsMismatch.current ? { onProtocolMismatch: (seen: string | null) => latest.current.onProtocolMismatch?.(seen) } : {}),
     }),
-    [basePath, readLocale],
+    [basePath, readLocale, outcomes],
   )
   // The provider listens for as long as it is mounted: the session is asked
   // for and kept current even before a part reads it.
   useEffect(() => store.subscribe(() => {}), [store])
   return (
     <StoreCtx.Provider value={store}>
-      <ThemeCtx.Provider value={theme}>{children}</ThemeCtx.Provider>
+      <OutcomesCtx.Provider value={outcomes}>
+        <ThemeCtx.Provider value={theme}>{children}</ThemeCtx.Provider>
+      </OutcomesCtx.Provider>
     </StoreCtx.Provider>
   )
 }
@@ -115,6 +136,26 @@ export function useSessionStore(): SessionStore {
   const store = useContext(StoreCtx)
   if (store === null) throw new Error('@cauthyhq/react: useSession needs <CauthyProvider> above it')
   return store
+}
+
+/**
+ * Runs `call` and answers what it answered, with the error of the last
+ * request it sent to `route` (a path under basePath), or null when that went
+ * through. For this package's own parts.
+ */
+export function useRequestOutcome(): <R>(route: string, call: () => Promise<R>) => Promise<{ value: R; error: AuthError | null }> {
+  const outcomes = useContext(OutcomesCtx)
+  const store = useSessionStore()
+  return useCallback(async (route, call) => {
+    let error: AuthError | null = null
+    const hear: Outcome = (path, e) => { if (path === `${store.basePath}${route}`) error = e }
+    outcomes?.add(hear)
+    try {
+      return { value: await call(), error }
+    } finally {
+      outcomes?.delete(hear)
+    }
+  }, [outcomes, store])
 }
 
 /** The provider's `theme`, or undefined. For this package's own parts. */
