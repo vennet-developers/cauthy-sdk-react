@@ -361,3 +361,91 @@
 :where([data-cauthy] .cauthy-challenge) {
   min-height: 65px;
 }
+
+/* ── The user button ─────────────────────────────────────────────────────── */
+
+:where(.cauthy-user-root[data-cauthy]) {
+  position: relative;
+  display: inline-block;
+}
+
+:where([data-cauthy] .cauthy-user-trigger) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 12px;
+  font: inherit;
+  font-weight: 600;
+  color: var(--cauthy-primary-text);
+  background: var(--cauthy-primary);
+  border: 0;
+  border-radius: var(--cauthy-button-radius);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+:where([data-cauthy] .cauthy-user-trigger[aria-haspopup]) {
+  width: 36px;
+  padding: 0;
+  border-radius: 9999px;
+}
+
+:where([data-cauthy] .cauthy-user-trigger:disabled) {
+  opacity: 0.6;
+  cursor: default;
+}
+
+:where([data-cauthy] .cauthy-user-trigger:focus-visible),
+:where([data-cauthy] .cauthy-user-item:focus-visible),
+:where([data-cauthy] .cauthy-organization:focus-visible) {
+  outline: 2px solid var(--cauthy-accent);
+  outline-offset: 2px;
+}
+
+:where([data-cauthy] .cauthy-user-menu) {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+  padding: 6px;
+  background: var(--cauthy-surface);
+  border: 1px solid var(--cauthy-border);
+  border-radius: var(--cauthy-radius);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+:where([data-cauthy] .cauthy-user-identity) {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 4px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--cauthy-border);
+}
+
+:where([data-cauthy] .cauthy-user-identity span) {
+  font-size: 13px;
+  color: var(--cauthy-text-muted);
+}
+
+:where([data-cauthy] .cauthy-user-item) {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  font: inherit;
+  text-align: left;
+  color: var(--cauthy-text);
+  background: none;
+  border: 0;
+  border-radius: var(--cauthy-radius);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+:where([data-cauthy] .cauthy-user-item:hover:not(:disabled)) {
+  background: color-mix(in srgb, var(--cauthy-text) 6%, transparent);
+}
