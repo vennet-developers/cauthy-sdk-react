@@ -449,3 +449,47 @@
 :where([data-cauthy] .cauthy-user-item:hover:not(:disabled)) {
   background: color-mix(in srgb, var(--cauthy-text) 6%, transparent);
 }
+
+/* ── Organizations ───────────────────────────────────────────────────────── */
+
+:where(.cauthy-organizations[data-cauthy]) {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 520px;
+}
+
+:where([data-cauthy] .cauthy-organizationList) {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+:where([data-cauthy] .cauthy-organization) {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  font: inherit;
+  text-align: left;
+  color: var(--cauthy-text);
+  background: var(--cauthy-surface);
+  border: 1px solid var(--cauthy-border);
+  border-radius: var(--cauthy-radius);
+  cursor: pointer;
+}
+
+:where([data-cauthy] .cauthy-organization[aria-current="true"]) {
+  border-color: var(--cauthy-primary);
+  box-shadow: inset 0 0 0 1px var(--cauthy-primary);
+}
+
+:where([data-cauthy] .cauthy-organizationRole) {
+  font-size: 13px;
+  color: var(--cauthy-text-muted);
+}
