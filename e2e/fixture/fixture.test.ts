@@ -3,15 +3,11 @@
 // protocol 1 and no-store, carries the fields the table says, `next` on a
 // sign-in answer, and the protocol's error shape on a refusal.
 import { describe, expect, it } from 'vitest'
-import { SIGN_IN_PATHS, type RouteDetail, type RouteId } from '@cauthyhq/js'
+import { SIGN_IN_PATHS, type RouteId } from '@cauthyhq/js'
 import { readFixture } from '../servers/fixture'
-
-// The whole route table (answer fields, redirects, streams) is generated in
-// @cauthyhq/js for its tests and never shipped: the package's ROUTES holds
-// only method and path. It is read from the sibling checkout that
-// scripts/siblings.sh brings, at the commit siblings.lock pins.
-const details = new URL('../../../cauthy-sdk-js/src/generated/route-details.ts', import.meta.url).pathname
-const { ROUTE_DETAILS: ROUTES } = (await import(/* @vite-ignore */ details)) as { ROUTE_DETAILS: Record<RouteId, RouteDetail> }
+// The whole route table (answer fields, redirects, streams): @cauthyhq/js
+// ships only method and path, so the generated table is vendored here.
+import { ROUTE_DETAILS as ROUTES } from './route-details'
 
 const fixture = readFixture()
 const all = Object.entries(fixture.scenarios).flatMap(([scenario, list]) => list.map((e) => ({ scenario, e })))
