@@ -1,0 +1,1560 @@
+{
+  "protocol": 1,
+  "recordedFrom": "@cauthyhq/node",
+  "scenarios": {
+    "the account > changes the name, and the session on screen follows": [
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/look",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":null,\"status\":\"unauthenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/methods",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"providers\":[],\"passwordSignIn\":true,\"signUp\":true,\"persistentSessions\":true,\"magicLink\":false,\"passkey\":false,\"passkeyHere\":false,\"passkeyOnCauthy\":false,\"sso\":false}"
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "path": "/api/auth/sign-in/email",
+          "query": "",
+          "headers": {
+            "content-type": "application/json",
+            "accept": "application/json",
+            "x-cauthy-request": "1"
+          },
+          "body": {
+            "email": "member@example.com",
+            "password": "acme-e2e-password-1"
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [
+            "cauthy_session.0=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..ErszXqPJltMUEuca.C2lnKQfXPvC47VrWF1tY0yeZqicJR9DSvJxFnKvaYelZHfzxuDqilbsi_A9OBwvqZO8Ve5zsw5KUoCjxXjzEzkJyOiTKUlq6bzPPksOD6t_X5UjEPKZWd08dW2COlUggtANe25sUj0Sr_rB78__pgr7YCpIM5AWzB0fm8CCNKcYIo2avxamhSwCjFjnXEpTovOfwaNyQuTo7G6w97fVFOj1uHdmlqoGXzALU1Xia0eqDvVVFT5wNNA.VK4--Lx0Fx8JliYTjNBj3w; Path=/; HttpOnly; SameSite=Lax"
+          ],
+          "body": "{\"status\":\"signed_in\",\"session\":{\"user\":{\"id\":\"u-member\",\"email\":\"member@example.com\",\"name\":\"Acme Member\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[{\"id\":\"3b2f6c1e-8d4a-4c7e-9f10-2a6b5c8d9e01\",\"system\":\"acme-crm\",\"name\":\"Acme Sales\",\"kind\":\"customer\",\"role\":\"owner\",\"metadata\":{},\"permissions\":[\"deals:read\",\"deals:write\",\"cauthy:members:*\",\"cauthy:organization:*\"],\"denied\":[],\"conditional\":[]}],\"expiresAt\":\"2026-11-08T02:22:19.000Z\"},\"next\":\"done\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":{\"user\":{\"id\":\"u-member\",\"email\":\"member@example.com\",\"name\":\"Acme Member\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[{\"id\":\"3b2f6c1e-8d4a-4c7e-9f10-2a6b5c8d9e01\",\"system\":\"acme-crm\",\"name\":\"Acme Sales\",\"kind\":\"customer\",\"role\":\"owner\",\"metadata\":{},\"permissions\":[\"deals:read\",\"deals:write\",\"cauthy:members:*\",\"cauthy:organization:*\"],\"denied\":[],\"conditional\":[]}],\"expiresAt\":\"2026-11-08T02:22:19.000Z\"},\"status\":\"authenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":{\"user\":{\"id\":\"u-member\",\"email\":\"member@example.com\",\"name\":\"Acme Member\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[{\"id\":\"3b2f6c1e-8d4a-4c7e-9f10-2a6b5c8d9e01\",\"system\":\"acme-crm\",\"name\":\"Acme Sales\",\"kind\":\"customer\",\"role\":\"owner\",\"metadata\":{},\"permissions\":[\"deals:read\",\"deals:write\",\"cauthy:members:*\",\"cauthy:organization:*\"],\"denied\":[],\"conditional\":[]}],\"expiresAt\":\"2026-11-08T02:22:19.000Z\"},\"status\":\"authenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":{\"user\":{\"id\":\"u-member\",\"email\":\"member@example.com\",\"name\":\"Acme Member\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[{\"id\":\"3b2f6c1e-8d4a-4c7e-9f10-2a6b5c8d9e01\",\"system\":\"acme-crm\",\"name\":\"Acme Sales\",\"kind\":\"customer\",\"role\":\"owner\",\"metadata\":{},\"permissions\":[\"deals:read\",\"deals:write\",\"cauthy:members:*\",\"cauthy:organization:*\"],\"denied\":[],\"conditional\":[]}],\"expiresAt\":\"2026-11-08T02:22:19.000Z\"},\"status\":\"authenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/look",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/me",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"account\":{\"id\":\"u-member\",\"email\":\"member@example.com\",\"name\":\"Acme Member\",\"emailVerified\":true,\"hasPassword\":true,\"mfaEnabled\":false}}"
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "path": "/api/auth/me",
+          "query": "",
+          "headers": {
+            "content-type": "application/json",
+            "accept": "application/json",
+            "x-cauthy-request": "1"
+          },
+          "body": {
+            "name": "Acme Member Renamed"
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [
+            "cauthy_session.0=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..dhnLdV8JjAnVf2Dq.f1ODZC4L3b0wtjrEaAFsi1Ssm2tUlBb88vShfPB5q5JVdBMuWfNtqgyGhVn0Y7vHMDiM1Hk08JyFQNaT4ekJbyY5eElvj7lRUmb6bLtzbkSr6JlSc2246-KBXSxOv40LNqgpYiUVc91OHsek-jieg-yNxY3lRgPnvaa0TUNayxv1JMThQc3FztfeFdsr9-A-_ghjbMenE26fwO2VqEHcO71nThUkscRureejB6lK_FmPKzd2P59elAVofkoJ-AtF.3AppG71_46tghetGPZxMEQ; Path=/; HttpOnly; SameSite=Lax"
+          ],
+          "body": "{\"status\":\"saved\",\"account\":{\"id\":\"u-member\",\"email\":\"member@example.com\",\"name\":\"Acme Member Renamed\",\"emailVerified\":true,\"hasPassword\":true,\"mfaEnabled\":false}}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":{\"user\":{\"id\":\"u-member\",\"email\":\"member@example.com\",\"name\":\"Acme Member Renamed\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[{\"id\":\"3b2f6c1e-8d4a-4c7e-9f10-2a6b5c8d9e01\",\"system\":\"acme-crm\",\"name\":\"Acme Sales\",\"kind\":\"customer\",\"role\":\"owner\",\"metadata\":{},\"permissions\":[\"deals:read\",\"deals:write\",\"cauthy:members:*\",\"cauthy:organization:*\"],\"denied\":[],\"conditional\":[]}],\"expiresAt\":\"2026-11-08T02:22:19.000Z\"},\"status\":\"authenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "path": "/api/auth/me",
+          "query": "",
+          "headers": {
+            "content-type": "application/json",
+            "accept": "application/json",
+            "x-cauthy-request": "1"
+          },
+          "body": {
+            "name": "Acme Member"
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [
+            "cauthy_session.0=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..HxHV1JUwvvBpB0tL.NiMqYpExgHKpmz51HuFCi8DbpvcRh9jXnBkHiIZ9_CwJukvUsxlDNPS1HMzigydISwKZliNn0LGuiDgJJzm89F_wsmWqlnitRV0S2TXpIQRfej_78v_ZHUngQTDZNcxhtCDqJG5HShTGA6NZX4je9FxWlt_drXmLizsu5kNeRw-t5KflUQrcZk6ev2CEpuRugy1RsCYuc9HIxISkF2ODMayfgDuDbIk0YUny73H6gQyAgkFCAiQyDw.CxRHrud39QNBjadogMYNGw; Path=/; HttpOnly; SameSite=Lax"
+          ],
+          "body": "{\"status\":\"saved\",\"account\":{\"id\":\"u-member\",\"email\":\"member@example.com\",\"name\":\"Acme Member\",\"emailVerified\":true,\"hasPassword\":true,\"mfaEnabled\":false}}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":{\"user\":{\"id\":\"u-member\",\"email\":\"member@example.com\",\"name\":\"Acme Member\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[{\"id\":\"3b2f6c1e-8d4a-4c7e-9f10-2a6b5c8d9e01\",\"system\":\"acme-crm\",\"name\":\"Acme Sales\",\"kind\":\"customer\",\"role\":\"owner\",\"metadata\":{},\"permissions\":[\"deals:read\",\"deals:write\",\"cauthy:members:*\",\"cauthy:organization:*\"],\"denied\":[],\"conditional\":[]}],\"expiresAt\":\"2026-11-08T02:22:19.000Z\"},\"status\":\"authenticated\"}"
+        }
+      }
+    ],
+    "the headless flow > walks the second step with a form of the application's own": [
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":null,\"status\":\"unauthenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "path": "/api/auth/sign-in/email",
+          "query": "",
+          "headers": {
+            "content-type": "application/json",
+            "accept": "application/json",
+            "x-cauthy-request": "1"
+          },
+          "body": {
+            "email": "mfa@example.com",
+            "password": "acme-e2e-password-1"
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [
+            "cauthy_session_step=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..R7K22TK3jCVVLS6n.Hk_DxjZYJfxrDPkD6ru59dfnlPI-i-pT6pRNk_8z3pmjvTuOxJAvKxcPHmHdf_cZ5g.58viq1zyAvGPyW5tUKDaqw; Path=/; HttpOnly; SameSite=Lax; Max-Age=600"
+          ],
+          "body": "{\"status\":\"mfa_required\",\"next\":\"mfa\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":null,\"status\":\"unauthenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "path": "/api/auth/sign-in/mfa",
+          "query": "",
+          "headers": {
+            "content-type": "application/json",
+            "accept": "application/json",
+            "x-cauthy-request": "1"
+          },
+          "body": {
+            "code": "123456"
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [
+            "cauthy_session.0=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..KPIqw272wxTzZMAG.fHFaoppE0aiMhAZ4Zqij7s3kEbszT3YVjLcu4jTalPQtTZEeP1eBZS3G57We2pxSCmzwRKMUC_WamduEUokTg31FXVQ5IhOpufrV0wxVgap6LbTEMm3cCGwFz7oG7Rau4OdlVC7JIfofeR_GAd8vIjZrSvaZsFr3g0IpMQ1xzSUmfis3wcPsnPzDL3DMBCvb1SWSEUqGG4uvBfcIaqFEtEXLT-okiBGMsRgrLHDedaYg4kO8yU4dNn-K4pEURsQ.Dp-vqYQXnlEO25QDOmyuUA; Path=/; HttpOnly; SameSite=Lax",
+            "cauthy_session_step=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0"
+          ],
+          "body": "{\"status\":\"signed_in\",\"session\":{\"user\":{\"id\":\"u-mfa\",\"email\":\"mfa@example.com\",\"name\":\"Acme Second Step\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[],\"expiresAt\":\"2026-11-08T02:22:20.000Z\"},\"next\":\"done\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":{\"user\":{\"id\":\"u-mfa\",\"email\":\"mfa@example.com\",\"name\":\"Acme Second Step\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[],\"expiresAt\":\"2026-11-08T02:22:20.000Z\"},\"status\":\"authenticated\"}"
+        }
+      }
+    ],
+    "organizations > lists them, their people, and what the person may do": [
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":null,\"status\":\"unauthenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/look",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/methods",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"providers\":[],\"passwordSignIn\":true,\"signUp\":true,\"persistentSessions\":true,\"magicLink\":false,\"passkey\":false,\"passkeyHere\":false,\"passkeyOnCauthy\":false,\"sso\":false}"
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "path": "/api/auth/sign-in/email",
+          "query": "",
+          "headers": {
+            "content-type": "application/json",
+            "accept": "application/json",
+            "x-cauthy-request": "1"
+          },
+          "body": {
+            "email": "member@example.com",
+            "password": "acme-e2e-password-1"
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [
+            "cauthy_session.0=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..3uImhV9YGn05C872.qogwYp4su9GlnG_6HzniyQqILxfKGHuVFXPcHVSqyJ4HvZpnd84bO2cWeYigeN1c8GatRMn6bed9OSTogluM2y_2ZZtCLHbYq43SPnjvvlALixf9hkFVGCAo5B7w06IdwPgu9KDaGl6a7P6PDnv_o1cMZSxALhJuQ9qXMiEbQzi6frG8NfoR3jyZjcE7klE2-rW7tINIKayQ4cL3XPbhodnzbykR2UQIMNLMrq3kzSyuO0VS76Yplg.7ulOp6kxDdKQ6UhQ4E8tiw; Path=/; HttpOnly; SameSite=Lax"
+          ],
+          "body": "{\"status\":\"signed_in\",\"session\":{\"user\":{\"id\":\"u-member\",\"email\":\"member@example.com\",\"name\":\"Acme Member\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[{\"id\":\"3b2f6c1e-8d4a-4c7e-9f10-2a6b5c8d9e01\",\"system\":\"acme-crm\",\"name\":\"Acme Sales\",\"kind\":\"customer\",\"role\":\"owner\",\"metadata\":{},\"permissions\":[\"deals:read\",\"deals:write\",\"cauthy:members:*\",\"cauthy:organization:*\"],\"denied\":[],\"conditional\":[]}],\"expiresAt\":\"2026-11-08T02:22:20.000Z\"},\"next\":\"done\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":{\"user\":{\"id\":\"u-member\",\"email\":\"member@example.com\",\"name\":\"Acme Member\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[{\"id\":\"3b2f6c1e-8d4a-4c7e-9f10-2a6b5c8d9e01\",\"system\":\"acme-crm\",\"name\":\"Acme Sales\",\"kind\":\"customer\",\"role\":\"owner\",\"metadata\":{},\"permissions\":[\"deals:read\",\"deals:write\",\"cauthy:members:*\",\"cauthy:organization:*\"],\"denied\":[],\"conditional\":[]}],\"expiresAt\":\"2026-11-08T02:22:20.000Z\"},\"status\":\"authenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":{\"user\":{\"id\":\"u-member\",\"email\":\"member@example.com\",\"name\":\"Acme Member\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[{\"id\":\"3b2f6c1e-8d4a-4c7e-9f10-2a6b5c8d9e01\",\"system\":\"acme-crm\",\"name\":\"Acme Sales\",\"kind\":\"customer\",\"role\":\"owner\",\"metadata\":{},\"permissions\":[\"deals:read\",\"deals:write\",\"cauthy:members:*\",\"cauthy:organization:*\"],\"denied\":[],\"conditional\":[]}],\"expiresAt\":\"2026-11-08T02:22:20.000Z\"},\"status\":\"authenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":{\"user\":{\"id\":\"u-member\",\"email\":\"member@example.com\",\"name\":\"Acme Member\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[{\"id\":\"3b2f6c1e-8d4a-4c7e-9f10-2a6b5c8d9e01\",\"system\":\"acme-crm\",\"name\":\"Acme Sales\",\"kind\":\"customer\",\"role\":\"owner\",\"metadata\":{},\"permissions\":[\"deals:read\",\"deals:write\",\"cauthy:members:*\",\"cauthy:organization:*\"],\"denied\":[],\"conditional\":[]}],\"expiresAt\":\"2026-11-08T02:22:20.000Z\"},\"status\":\"authenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/me/organizations",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"organizations\":[{\"id\":\"3b2f6c1e-8d4a-4c7e-9f10-2a6b5c8d9e01\",\"system\":\"acme-crm\",\"name\":\"Acme Sales\",\"kind\":\"customer\",\"role\":\"owner\",\"can\":{\"readMembers\":true,\"manageMembers\":true,\"removeMembers\":true,\"update\":true,\"archive\":true,\"delete\":true}}]}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/look",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/me/organizations",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"organizations\":[{\"id\":\"3b2f6c1e-8d4a-4c7e-9f10-2a6b5c8d9e01\",\"system\":\"acme-crm\",\"name\":\"Acme Sales\",\"kind\":\"customer\",\"role\":\"owner\",\"can\":{\"readMembers\":true,\"manageMembers\":true,\"removeMembers\":true,\"update\":true,\"archive\":true,\"delete\":true}}]}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/me/organizations/members",
+          "query": "?id=3b2f6c1e-8d4a-4c7e-9f10-2a6b5c8d9e01",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"members\":[{\"userId\":\"u-member\",\"email\":\"member@example.com\",\"name\":\"Acme Member\",\"role\":\"owner\",\"status\":\"active\",\"invited\":false,\"manager\":true,\"you\":true,\"since\":\"2026-11-01T12:00:00Z\"}]}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/me/organizations/roles",
+          "query": "?id=3b2f6c1e-8d4a-4c7e-9f10-2a6b5c8d9e01",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"roles\":[{\"role\":\"owner\",\"name\":\"Owner\",\"description\":\"Runs the organization\",\"manager\":true},{\"role\":\"member\",\"name\":\"Member\",\"description\":\"Works the deals\",\"manager\":false}]}"
+        }
+      }
+    ],
+    "the protocol > the backend says protocol 1, and every POST carries the request header": [
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":null,\"status\":\"unauthenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":null,\"status\":\"unauthenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/look",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/methods",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"providers\":[],\"passwordSignIn\":true,\"signUp\":true,\"persistentSessions\":true,\"magicLink\":false,\"passkey\":false,\"passkeyHere\":false,\"passkeyOnCauthy\":false,\"sso\":false}"
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "path": "/api/auth/sign-in/email",
+          "query": "",
+          "headers": {
+            "content-type": "application/json",
+            "accept": "application/json",
+            "x-cauthy-request": "1"
+          },
+          "body": {
+            "email": "member@example.com",
+            "password": "acme-e2e-password-1"
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [
+            "cauthy_session.0=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..VVlA1wcG8OOCXg36.sP779ICzW59BHJb-DsA_w0NnzYgNAmL1-nuWRxtOmjLdtNRj1M1GwF4eVOJlBnyjZSe1STCw8h3DiRxMnEqtAlqpUaDkzWR_CpALjHDJblHv2gLGRVJlYZBXsboY9iy36o8FNtf6JDydIPRM66qUluy-mtfW5ar0iYFxxU8sVqy1aoS68danbJFmxfempt-aPuR_Gulz78p99mfumpjpiDpH3WMcTeVgFJ9BmrTz77JGlniGe9efFQ.Z2NIUljisSlmyNxZ--1WZw; Path=/; HttpOnly; SameSite=Lax"
+          ],
+          "body": "{\"status\":\"signed_in\",\"session\":{\"user\":{\"id\":\"u-member\",\"email\":\"member@example.com\",\"name\":\"Acme Member\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[{\"id\":\"3b2f6c1e-8d4a-4c7e-9f10-2a6b5c8d9e01\",\"system\":\"acme-crm\",\"name\":\"Acme Sales\",\"kind\":\"customer\",\"role\":\"owner\",\"metadata\":{},\"permissions\":[\"deals:read\",\"deals:write\",\"cauthy:members:*\",\"cauthy:organization:*\"],\"denied\":[],\"conditional\":[]}],\"expiresAt\":\"2026-11-08T02:22:20.000Z\"},\"next\":\"done\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":{\"user\":{\"id\":\"u-member\",\"email\":\"member@example.com\",\"name\":\"Acme Member\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[{\"id\":\"3b2f6c1e-8d4a-4c7e-9f10-2a6b5c8d9e01\",\"system\":\"acme-crm\",\"name\":\"Acme Sales\",\"kind\":\"customer\",\"role\":\"owner\",\"metadata\":{},\"permissions\":[\"deals:read\",\"deals:write\",\"cauthy:members:*\",\"cauthy:organization:*\"],\"denied\":[],\"conditional\":[]}],\"expiresAt\":\"2026-11-08T02:22:20.000Z\"},\"status\":\"authenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":{\"user\":{\"id\":\"u-member\",\"email\":\"member@example.com\",\"name\":\"Acme Member\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[{\"id\":\"3b2f6c1e-8d4a-4c7e-9f10-2a6b5c8d9e01\",\"system\":\"acme-crm\",\"name\":\"Acme Sales\",\"kind\":\"customer\",\"role\":\"owner\",\"metadata\":{},\"permissions\":[\"deals:read\",\"deals:write\",\"cauthy:members:*\",\"cauthy:organization:*\"],\"denied\":[],\"conditional\":[]}],\"expiresAt\":\"2026-11-08T02:22:20.000Z\"},\"status\":\"authenticated\"}"
+        }
+      }
+    ],
+    "signing in > with a password, then out again from the user button": [
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":null,\"status\":\"unauthenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/look",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/methods",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"providers\":[],\"passwordSignIn\":true,\"signUp\":true,\"persistentSessions\":true,\"magicLink\":false,\"passkey\":false,\"passkeyHere\":false,\"passkeyOnCauthy\":false,\"sso\":false}"
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "path": "/api/auth/sign-in/email",
+          "query": "",
+          "headers": {
+            "content-type": "application/json",
+            "accept": "application/json",
+            "x-cauthy-request": "1"
+          },
+          "body": {
+            "email": "member@example.com",
+            "password": "acme-e2e-password-1"
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [
+            "cauthy_session.0=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..ao9ZwzIEJs-3y3qN.dU9ihGVgcNWF-kkTKVU4BNv3zdLNGHaIyhwwZrPysr0jYxVkw4O2klX974vn3LaSU1SQRzYJxmbysHCK5nB3NqoFk5JJ3Iuhu7MuqPqWiZuNnQ4fVZ7DHusINWI7Q-eDyuPJN2nIJrmrSa3E0e3X-COftBgxSxPm54vOPrcyBAkzyNgYTvEI79F0_gnK-SWdzY07n3R75HlBU2pUD-SoHc0UGR72wLSzwL-4NrUnXdKcRbiKN8K-qA.l_KWwEM7JT8udiIWPJttmw; Path=/; HttpOnly; SameSite=Lax"
+          ],
+          "body": "{\"status\":\"signed_in\",\"session\":{\"user\":{\"id\":\"u-member\",\"email\":\"member@example.com\",\"name\":\"Acme Member\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[{\"id\":\"3b2f6c1e-8d4a-4c7e-9f10-2a6b5c8d9e01\",\"system\":\"acme-crm\",\"name\":\"Acme Sales\",\"kind\":\"customer\",\"role\":\"owner\",\"metadata\":{},\"permissions\":[\"deals:read\",\"deals:write\",\"cauthy:members:*\",\"cauthy:organization:*\"],\"denied\":[],\"conditional\":[]}],\"expiresAt\":\"2026-11-08T02:22:21.000Z\"},\"next\":\"done\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":{\"user\":{\"id\":\"u-member\",\"email\":\"member@example.com\",\"name\":\"Acme Member\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[{\"id\":\"3b2f6c1e-8d4a-4c7e-9f10-2a6b5c8d9e01\",\"system\":\"acme-crm\",\"name\":\"Acme Sales\",\"kind\":\"customer\",\"role\":\"owner\",\"metadata\":{},\"permissions\":[\"deals:read\",\"deals:write\",\"cauthy:members:*\",\"cauthy:organization:*\"],\"denied\":[],\"conditional\":[]}],\"expiresAt\":\"2026-11-08T02:22:21.000Z\"},\"status\":\"authenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":{\"user\":{\"id\":\"u-member\",\"email\":\"member@example.com\",\"name\":\"Acme Member\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[{\"id\":\"3b2f6c1e-8d4a-4c7e-9f10-2a6b5c8d9e01\",\"system\":\"acme-crm\",\"name\":\"Acme Sales\",\"kind\":\"customer\",\"role\":\"owner\",\"metadata\":{},\"permissions\":[\"deals:read\",\"deals:write\",\"cauthy:members:*\",\"cauthy:organization:*\"],\"denied\":[],\"conditional\":[]}],\"expiresAt\":\"2026-11-08T02:22:21.000Z\"},\"status\":\"authenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "path": "/api/auth/sign-out",
+          "query": "",
+          "headers": {
+            "content-type": "application/json",
+            "accept": "application/json",
+            "x-cauthy-request": "1"
+          },
+          "body": {}
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [
+            "cauthy_session.0=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0"
+          ],
+          "body": "{\"status\":\"signed_out\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":null,\"status\":\"unauthenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":null,\"status\":\"unauthenticated\"}"
+        }
+      }
+    ],
+    "signing in > a wrong password is announced, and the form is free again": [
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":null,\"status\":\"unauthenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/look",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/methods",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"providers\":[],\"passwordSignIn\":true,\"signUp\":true,\"persistentSessions\":true,\"magicLink\":false,\"passkey\":false,\"passkeyHere\":false,\"passkeyOnCauthy\":false,\"sso\":false}"
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "path": "/api/auth/sign-in/email",
+          "query": "",
+          "headers": {
+            "content-type": "application/json",
+            "accept": "application/json",
+            "x-cauthy-request": "1"
+          },
+          "body": {
+            "email": "member@example.com",
+            "password": "not-the-password"
+          }
+        },
+        "response": {
+          "status": 401,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"error\":{\"code\":\"invalid_credentials\",\"message\":\"invalid email or password\"}}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":null,\"status\":\"unauthenticated\"}"
+        }
+      }
+    ],
+    "signing in > the fields are checked before anything is sent, the first wrong one focused": [
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":null,\"status\":\"unauthenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/look",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/methods",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"providers\":[],\"passwordSignIn\":true,\"signUp\":true,\"persistentSessions\":true,\"magicLink\":false,\"passkey\":false,\"passkeyHere\":false,\"passkeyOnCauthy\":false,\"sso\":false}"
+        }
+      }
+    ],
+    "signing in > an account with a second step is asked for its code": [
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":null,\"status\":\"unauthenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/look",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/methods",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"providers\":[],\"passwordSignIn\":true,\"signUp\":true,\"persistentSessions\":true,\"magicLink\":false,\"passkey\":false,\"passkeyHere\":false,\"passkeyOnCauthy\":false,\"sso\":false}"
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "path": "/api/auth/sign-in/email",
+          "query": "",
+          "headers": {
+            "content-type": "application/json",
+            "accept": "application/json",
+            "x-cauthy-request": "1"
+          },
+          "body": {
+            "email": "mfa@example.com",
+            "password": "acme-e2e-password-1"
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [
+            "cauthy_session_step=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..oXtKHueDPuZZbv9s.lqQ1MbUoybhxy3XTNEGB6-neXQNTiy6xo14Ga5KnEcq1WpaQuwas5JzaMazogUwvJg.edVw87tDQA74o1nxNAgrhg; Path=/; HttpOnly; SameSite=Lax; Max-Age=600"
+          ],
+          "body": "{\"status\":\"mfa_required\",\"next\":\"mfa\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":null,\"status\":\"unauthenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "path": "/api/auth/sign-in/mfa/methods",
+          "query": "",
+          "headers": {
+            "content-type": "application/json",
+            "accept": "application/json",
+            "x-cauthy-request": "1"
+          },
+          "body": {}
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"status\":\"ok\",\"totp\":true,\"phone\":null,\"push\":null,\"email\":null}"
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "path": "/api/auth/sign-in/mfa",
+          "query": "",
+          "headers": {
+            "content-type": "application/json",
+            "accept": "application/json",
+            "x-cauthy-request": "1"
+          },
+          "body": {
+            "code": "123456"
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [
+            "cauthy_session.0=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..2nfE1N3QmVKTdYmH.TFOXX1PC9k84YCdVqSkXKNMpD00Vg2fhjWH9znf__JlTvM6XjR7_iUCwTXaMtBgpm1OIIIi_HbmKMU5LQ06J1U0LahPlRBp3KGx386uI_Z3Vc3mSNqCJsmnRt10luJ1EmwLDIj0w1z158AwULPYwyI23fbl_Py7eaQqk9re39W04fUNkOeFAuE9LJOhCL6K0Qh-lGCRgIQKrkWhnbS-gRstEDBAxmaiRss1jdEobYQc3f6rLglmt85Ny1ltnEIw.IpRzLOYFXvif4RX4Kznv0g; Path=/; HttpOnly; SameSite=Lax",
+            "cauthy_session_step=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0"
+          ],
+          "body": "{\"status\":\"signed_in\",\"session\":{\"user\":{\"id\":\"u-mfa\",\"email\":\"mfa@example.com\",\"name\":\"Acme Second Step\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[],\"expiresAt\":\"2026-11-08T02:22:22.000Z\"},\"next\":\"done\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":{\"user\":{\"id\":\"u-mfa\",\"email\":\"mfa@example.com\",\"name\":\"Acme Second Step\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[],\"expiresAt\":\"2026-11-08T02:22:22.000Z\"},\"status\":\"authenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":{\"user\":{\"id\":\"u-mfa\",\"email\":\"mfa@example.com\",\"name\":\"Acme Second Step\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[],\"expiresAt\":\"2026-11-08T02:22:22.000Z\"},\"status\":\"authenticated\"}"
+        }
+      }
+    ],
+    "signing up > creates an account and is signed in": [
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":null,\"status\":\"unauthenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/look",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/methods",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"providers\":[],\"passwordSignIn\":true,\"signUp\":true,\"persistentSessions\":true,\"magicLink\":false,\"passkey\":false,\"passkeyHere\":false,\"passkeyOnCauthy\":false,\"sso\":false}"
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "path": "/api/auth/sign-up/email",
+          "query": "",
+          "headers": {
+            "content-type": "application/json",
+            "accept": "application/json",
+            "x-cauthy-request": "1"
+          },
+          "body": {
+            "email": "new.chromium@example.com",
+            "password": "acme-e2e-password-1",
+            "name": "Acme Newcomer"
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [
+            "cauthy_session.0=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..9Eq5AHc3xlkL5z9Y.JcKixFK3E3Qql7EjyVdUVazdaOLVjhuS6TzUHM7C1iCJ1OQ_IoyTuc0GdxI0YhyZGPeb6kG7YR8Kzh65EBYJ2altpntbwj2nR69py0BSkwvnhg7lNDMW-RHfhqSHoBnPm1kawCgMnZzPGIr05reAiTUlOBwdkI5huYKGsMHf7vmqWJ8LM1H2WwEailpGMBxXggg3_17Rw1BJGxu_AgIzhfLOOn6SZ_2R8dvlVcc3Ur41aJ9qICDRjKRwIqQMsPJt.ovXPzlo0WGqoXh2byO6emA; Path=/; HttpOnly; SameSite=Lax"
+          ],
+          "body": "{\"status\":\"signed_in\",\"session\":{\"user\":{\"id\":\"u-new-5\",\"email\":\"new.chromium@example.com\",\"name\":\"Acme Newcomer\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[],\"expiresAt\":\"2026-11-08T02:22:22.000Z\"},\"next\":\"done\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":{\"user\":{\"id\":\"u-new-5\",\"email\":\"new.chromium@example.com\",\"name\":\"Acme Newcomer\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[],\"expiresAt\":\"2026-11-08T02:22:22.000Z\"},\"status\":\"authenticated\"}"
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "path": "/api/auth/session",
+          "query": "",
+          "headers": {
+            "accept": "application/json"
+          },
+          "body": null
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-store",
+            "cauthy-protocol": "1"
+          },
+          "setCookie": [],
+          "body": "{\"session\":{\"user\":{\"id\":\"u-new-5\",\"email\":\"new.chromium@example.com\",\"name\":\"Acme Newcomer\",\"emailVerified\":true,\"restricted\":false},\"tenantId\":\"t1\",\"roles\":[\"member\"],\"organizations\":[],\"expiresAt\":\"2026-11-08T02:22:22.000Z\"},\"status\":\"authenticated\"}"
+        }
+      }
+    ]
+  }
+}
