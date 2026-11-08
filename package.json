@@ -104,5 +104,10 @@
   "allowScripts": {
     "esbuild": false,
     "fsevents": false
+  },
+  "overrides": {
+    "tsup": {
+      "esbuild": "0.28.2"
+    }
   }
 }
