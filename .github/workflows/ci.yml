@@ -1,0 +1,46 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+# No browsers here: the Playwright suite (npm run e2e:node), its replay of the
+# recorded protocol (npm run e2e:fixture), the run against cauthy-sdk-go
+# (npm run e2e:go) and the Next.js build (npm run ssr:smoke) run on a
+# developer's machine before a release (README, "The browser suite").
+# The recorded protocol itself is checked against the spec in npm test.
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [20, 22, 24]
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: ${{ matrix.node }}
+      # No `cache: npm` while the lockfile points at sibling paths: the cache
+      # key would not change when a sibling does. Task 33 adds it back.
+      - run: sh scripts/siblings.sh
+      - run: npm ci
+      - run: npm run typecheck
+      # Unit, components, a11y with axe-core, server rendering, compatibility, the fixture check.
+      - run: npm test
+      - run: npm run check:fixtures
+      - name: the same tests on React 18
+        if: matrix.node == 22
+        run: npm install --no-save react@18.3.1 react-dom@18.3.1 && npm test
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+      - run: sh scripts/siblings.sh
+      - run: npm ci
+      # The build, publint, attw, 'use client', the bundle budget (45 kB gzipped per entry), the tarball, the dry run.
+      - run: npm run check:package

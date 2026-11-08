@@ -1,0 +1,33 @@
+name: release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    # The environment asks Ivan to approve every run.
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - name: no dependency on a local path
+        run: |
+          node -e "const p=require('./package.json'); const bad=Object.entries({...p.dependencies, ...p.devDependencies}).filter(([, v]) => String(v).startsWith('file:')); if (bad.length) { console.error('file: dependencies:', bad); process.exit(1) }"
+      - name: the tag is the package's version
+        run: test "v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
+      - run: npm ci --ignore-scripts
+      - run: npm run typecheck
+      - run: npm test
+      # The browser suite is not run here: it runs before the tag, on a developer's machine (npm run e2e:node).
+      - run: npm run check:package
+      - name: npm that publishes through trusted publishing (OIDC, no token)
+        run: npm install -g npm@11.19.1
+      - run: npm publish --provenance --access public
