@@ -158,7 +158,7 @@ describe('a new password\'s field', () => {
 
   it('<SignIn /> shows the usual form, busy and with nothing to press, until the workspace says what it offers', () => {
     const html = render(createElement(SignIn))
-    expect(html).toMatch(/<form class="cauthy-form" data-cauthy="" noValidate="" aria-busy="true"/)
+    expect(html).toMatch(/<form class="cauthy-form" data-cauthy="" novalidate="" aria-busy="true"/i)
     expect(html.match(/<input [^>]*>/g)?.every((i) => i.includes('disabled=""'))).toBe(true)
     expect(html).toMatch(/<button type="submit" disabled="" class="cauthy-button">Sign in<\/button>/)
   })
