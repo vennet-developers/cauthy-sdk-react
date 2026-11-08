@@ -13,6 +13,10 @@
   "cauthy": {
     "protocol": 1
   },
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -47,6 +51,7 @@
     "siblings": "sh scripts/siblings.sh",
     "check:fixtures": "sh scripts/check-fixtures.sh",
     "check:package": "sh scripts/check-package.sh",
+    "check:size": "node scripts/check-size.mjs",
     "ssr:smoke": "sh scripts/ssr-smoke.sh",
     "e2e:build": "vite build --config e2e/app/vite.config.ts",
     "e2e:node": "npm run e2e:build && E2E_BACKEND=node playwright test",
