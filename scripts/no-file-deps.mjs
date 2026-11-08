@@ -1,7 +1,6 @@
 // Refuses to publish a package whose published dependencies a registry cannot
-// serve: `file:`, `link:` or a git checkout. While @cauthyhq/js is a sibling
-// (`file:../cauthy-sdk-js`), a publish would ship a package nobody can
-// install. Development dependencies are not published, so they may be local.
+// serve: `file:`, `link:` or a git checkout. Such a package would install
+// nowhere but here. Development dependencies are not published, so they may be local.
 //
 //   node scripts/no-file-deps.mjs [directory]     # default: the repository
 import { readFileSync } from 'node:fs'

@@ -48,7 +48,6 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "siblings": "sh scripts/siblings.sh",
     "check:fixtures": "sh scripts/check-fixtures.sh",
     "check:package": "sh scripts/check-package.sh",
     "check:size": "node scripts/check-size.mjs",
@@ -64,7 +63,7 @@
     "react": ">=18"
   },
   "dependencies": {
-    "@cauthyhq/js": "file:../cauthy-sdk-js"
+    "@cauthyhq/js": "^1.0.0"
   },
   "publishConfig": {
     "access": "public",
@@ -82,7 +81,7 @@
   ],
   "devDependencies": {
     "@arethetypeswrong/cli": "0.18.5",
-    "@cauthyhq/node": "file:../cauthy-sdk-node",
+    "@cauthyhq/node": "^1.0.0",
     "@playwright/test": "1.56.1",
     "@types/express": "5.0.6",
     "@types/node": "20.19.41",

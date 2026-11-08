@@ -21,9 +21,7 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: ${{ matrix.node }}
-      # No `cache: npm` while the lockfile points at sibling paths: the cache
-      # key would not change when a sibling does. Task 33 adds it back.
-      - run: sh scripts/siblings.sh
+          cache: npm
       - run: npm ci
       - run: npm run typecheck
       # Unit, components, a11y with axe-core, server rendering, compatibility, the fixture check.
@@ -40,7 +38,7 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
-      - run: sh scripts/siblings.sh
+          cache: npm
       - run: npm ci
       # The build, publint, attw, 'use client', the bundle budget (45 kB gzipped per entry), the tarball, the dry run.
       - run: npm run check:package
