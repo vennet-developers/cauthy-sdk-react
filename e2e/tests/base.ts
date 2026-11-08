@@ -12,7 +12,8 @@ interface Protocol {
 
 export const test = base.extend<{ protocol: Protocol }>({
   protocol: [async ({ page, request }, use, info) => {
-    const scenario = info.titlePath.slice(1).join(' › ')
+    // ASCII only: the name travels in an HTTP header, which cannot carry '›'.
+    const scenario = info.titlePath.slice(1).join(' > ')
     await page.setExtraHTTPHeaders({ 'x-e2e-scenario': scenario })
     await request.post('/__e2e/begin', { data: { scenario } })
     const seen: Protocol = { posts: [], warnings: [] }
