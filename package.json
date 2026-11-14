@@ -89,7 +89,7 @@
     "@types/react-dom": "19.2.7",
     "@vitejs/plugin-react": "4.7.0",
     "axe-core": "4.10.3",
-    "cauthy-auth": "0.42.0",
+    "cauthy-auth": "0.43.0",
     "express": "5.3.0",
     "jsdom": "26.1.0",
     "publint": "0.3.25",
